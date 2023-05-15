@@ -23,7 +23,7 @@ public class UserService {
                 return new ResponseEntity(user,HttpStatus.OK);
             }
         }
-        return new ResponseEntity(null,HttpStatus.NOT_FOUND);
+        return new ResponseEntity("User not found with the given id",HttpStatus.NOT_FOUND);
     }
     boolean validateName(String name) {
         Pattern p=Pattern.compile("^[\\p{L} .'-]+$");
@@ -39,14 +39,16 @@ public class UserService {
 
     ResponseEntity<UserDetails> creatingUser(UserDetails user) throws Exception {
             if (!validateName(user.name)|| !validateEmail(user.user_name)) {
-                throw new Exception("name or user_name is invalid");
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,"name or user_name is invalid");
             }
+            addUser(user);
             return new ResponseEntity(user, HttpStatus.OK);
     }
     ResponseEntity<UserDetails> updateExistingUser(UserDetails user) throws Exception {
-        if(validateName(user.name)==false){
+        //System.out.println("updating user");
+        if(!validateName(user.name)){
             //System.out.println("exception throwm");
-            throw new Exception("name is invalid");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,"name is invalid");
         }
         for(UserDetails users: list_of_users){
             if(users.id==user.id){
@@ -54,7 +56,7 @@ public class UserService {
                 return new ResponseEntity(users, HttpStatus.OK);
             }
         }
-        return new ResponseEntity(null,HttpStatus.NOT_FOUND);
+        return new ResponseEntity("user not found",HttpStatus.NOT_FOUND);
     }
 
     void addUser(UserDetails user){

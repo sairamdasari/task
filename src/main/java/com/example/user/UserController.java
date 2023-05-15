@@ -14,11 +14,11 @@ public class UserController {
     UserService service;
     ArrayList<UserDetails> users=new ArrayList<>();
 
-    @RequestMapping("/updateuser")
+    @PostMapping (value = "/updateuser" )
     public ResponseEntity UpdateUser(@RequestBody UserDetails user) throws Exception {
         return service.updateExistingUser(user);
     }
-    @RequestMapping("/createuser")
+    @PostMapping("/createuser")
     public ResponseEntity createUser(@RequestBody UserDetails user) throws Exception{
         return service.creatingUser(user);
     }
